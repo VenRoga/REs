@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="REs.Resources.Pages.MainPage"
+             xmlns:l="clr-namespace:REs.Resources.ViewModels">
+
+    <ContentPage.BindingContext>
+        <l:MainPageVM/>
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout>
+            <Button
+                x:Name="BtnToCompletePage"
+                Text="Завершенные" 
+                Command="{Binding GoToCompletedCommand}" />
+
+            <Button
+                x:Name="BtnToProccessPage"
+                Text="В процессе" 
+                Command="{Binding GoToInProccessCommand}" /> 
+
+            <Button
+                x:Name="BtnToNewTaskPage"
+                Text="Новая задача" 
+                Command="{Binding GoToNewTaskCommand}" />
+
+            <Button
+                x:Name="BtnToSettingsPage"
+                Text="Настройки" 
+                Command="{Binding GoToSettingsCommand}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

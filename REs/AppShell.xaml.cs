@@ -1,10 +1,19 @@
-﻿namespace REs
+﻿using REs.Resources.Pages;
+
+namespace REs
 {
     public partial class AppShell : Shell
     {
         public AppShell()
         {
-            InitializeComponent();
+            InitializeComponent();             
+            #region подписки на страницы
+            Routing.RegisterRoute(nameof(MainPage), typeof(MainPage));
+            Routing.RegisterRoute(nameof(NewTaskPage), typeof(NewTaskPage));
+            Routing.RegisterRoute(nameof(CompletedPage), typeof(CompletedPage));
+            Routing.RegisterRoute(nameof(InProccessPage), typeof(InProccessPage));
+            Routing.RegisterRoute(nameof(SettingsPage), typeof(SettingsPage));
+            #endregion
         }
     }
 }
