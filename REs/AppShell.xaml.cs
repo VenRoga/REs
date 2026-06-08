@@ -12,7 +12,6 @@ namespace REs
             Routing.RegisterRoute(nameof(NewTaskPage), typeof(NewTaskPage));
             Routing.RegisterRoute(nameof(CompletedPage), typeof(CompletedPage));
             Routing.RegisterRoute(nameof(InProccessPage), typeof(InProccessPage));
-            Routing.RegisterRoute(nameof(SettingsPage), typeof(SettingsPage));
             #endregion
         }
     }

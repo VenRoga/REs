@@ -15,12 +15,6 @@ namespace REs.Resources.ViewModels
     {
         #region переход на страницы
         [RelayCommand]
-        private async Task GoToSettings()
-        {
-            await Shell.Current.GoToAsync(nameof(SettingsPage));
-        }
-
-        [RelayCommand]
         private async Task GoToInProccess()
         {
             await Shell.Current.GoToAsync(nameof(InProccessPage));
