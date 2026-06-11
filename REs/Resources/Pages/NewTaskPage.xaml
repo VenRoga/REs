@@ -19,79 +19,102 @@
     <Grid>
         <Image Source="background_for_main_page.png" Aspect="AspectFill" />
 
-        <ScrollView>
-            <VerticalStackLayout Margin="20,40,20,20" Spacing="20">
+        <Border HorizontalOptions="Center" 
+            VerticalOptions="Center"
+            BackgroundColor="#E608111A" 
+            StrokeShape="RoundRectangle 24" 
+            Padding="30,25"
+            WidthRequest="400">
 
-                <Label Text="Create New Task"
-                       TextColor="White"
-                       FontSize="28"
-                       FontAttributes="Bold"
-                       HorizontalOptions="Center"/>
+            <VerticalStackLayout Spacing="20" HorizontalOptions="Fill">
 
-                <VerticalStackLayout Spacing="8">
-                    <Label Text="Task Name"
-                           TextColor="{StaticResource MutedText}"
-                           FontSize="14"/>
+                <Label Text="Create New Task" 
+                   FontSize="28" 
+                   TextColor="{StaticResource MutedText}"
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center"
+                   Margin="0,0,0,10"/>
 
-                    <Entry Placeholder="Enter task name..."
-                           PlaceholderColor="{StaticResource MutedText}"
-                           Text="{Binding TaskName}"
-                           BackgroundColor="#30FFFFFF"
-                           TextColor="White"
-                           MaxLength="100"
-                           FontSize="16">
-                        <Entry.Behaviors>
-                            <toolkit:MaxLengthReachedBehavior />
-                        </Entry.Behaviors>
-                    </Entry>
-                </VerticalStackLayout>
+                <Grid ColumnDefinitions="*,*" 
+      RowDefinitions="Auto"
+      ColumnSpacing="12"
+      Margin="0">
+
+                    <!-- Первый элемент (Entry) -->
+                    <Border Grid.Column="0"
+            StrokeShape="RoundRectangle 16"
+            StrokeThickness="1"
+            Stroke="{StaticResource CardOutline}"
+            BackgroundColor="#0DFFFFFF"
+            Padding="16,12"
+            HeightRequest="52">
+                        <Entry Text="{Binding TaskName, Mode=TwoWay}"
+               Placeholder="Task Name"
+               PlaceholderColor="#5A6E75"
+               TextColor="#FFFFFF"
+               FontSize="16"
+               VerticalOptions="Center"
+               IsEnabled="{Binding IsBusy, Converter={toolkit:InvertedBoolConverter}}"/>
+                    </Border>
+
+                    <!-- Второй элемент (DatePicker) -->
+                    <Border Grid.Column="1"
+            StrokeShape="RoundRectangle 16"
+            StrokeThickness="1"
+            Stroke="{StaticResource CardOutline}"
+            BackgroundColor="#0DFFFFFF"
+            Padding="16,12"
+            HeightRequest="52">
+                        <DatePicker Date="{Binding EndTime, Mode=TwoWay}"
+                    Format="dd.MM.yyyy"
+                    TextColor="#FFFFFF"
+                    FontSize="16"
+                    BackgroundColor="Transparent"
+                    VerticalOptions="Center"
+                    IsEnabled="{Binding IsBusy, Converter={toolkit:InvertedBoolConverter}}"/>
+                    </Border>
+
+                </Grid>
 
                 <Label Text="{Binding ErrorMessage}"
-                       TextColor="Red"
-                       IsVisible="{Binding ErrorMessage, Converter={StaticResource IsNotNullOrEmpty}}"
-                       FontSize="12"/>
-                <Button Text="Create Task"
-                        Command="{Binding CreateTaskCommand}"
-                        IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBool}}"
-                        BackgroundColor="#4CAF50"
-                        TextColor="White"
-                        CornerRadius="8"
-                        HeightRequest="50">
-                    <Button.Triggers>
-                        <DataTrigger TargetType="Button"
-                                     Binding="{Binding IsBusy}"
-                                     Value="True">
-                            <Setter Property="Text" Value="Creating..."/>
-                        </DataTrigger>
-                    </Button.Triggers>
-                </Button>
+                   TextColor="#FF4B4B"
+                   FontSize="12"
+                   HorizontalOptions="Center"
+                   IsVisible="{Binding ErrorMessage, Converter={toolkit:IsStringNotNullOrWhiteSpaceConverter}}"/>
 
-                <ActivityIndicator IsVisible="{Binding IsBusy}"
-                                   IsRunning="{Binding IsBusy}"
-                                   Color="White"/>
+                <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}"
+                               Color="#38BDF8"
+                               HeightRequest="30"
+                               HorizontalOptions="Center"/>
 
-                <BoxView HeightRequest="1"
-                         BackgroundColor="#30FFFFFF"
-                         Margin="0,20"/>
+                <Border Style="{StaticResource MenuButtonStyle}"
+                    Opacity="{Binding IsBusy, Converter={toolkit:InvertedBoolConverter}, ConverterParameter=0.5}">
+                    <Border.Behaviors>
+                        <toolkit:TouchBehavior HoveredBackgroundColor="#30FFFFFF" />
+                    </Border.Behaviors>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding CreateTaskCommand}"/>
+                    </Border.GestureRecognizers>
+                    <Label Style="{StaticResource MenuLabelStyle}" 
+                       Text="Create" 
+                       HorizontalOptions="Center" 
+                       VerticalOptions="Center"/>
+                </Border>
 
-                <HorizontalStackLayout Spacing="15" HorizontalOptions="Center">
-                    <Border Style="{StaticResource MenuButtonStyle}">
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding GoToInProccessCommand}" />
-                        </Border.GestureRecognizers>
-                        <Label Style="{StaticResource MenuLabelStyle}"
-                               Text="In Process"/>
-                    </Border>
-
-                    <Border Style="{StaticResource MenuButtonStyle}">
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding GoToCompletedCommand}" />
-                        </Border.GestureRecognizers>
-                        <Label Style="{StaticResource MenuLabelStyle}"
-                               Text="Completed"/>
-                    </Border>
-                </HorizontalStackLayout>
+                <Border Style="{StaticResource MenuButtonStyle}">
+                    <Border.Behaviors>
+                        <toolkit:TouchBehavior HoveredBackgroundColor="#30FFFFFF" />
+                    </Border.Behaviors>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding GoToInProccessCommand}"/>
+                    </Border.GestureRecognizers>
+                    <Label Style="{StaticResource MenuLabelStyle}" 
+                       Text="Cancel" 
+                       HorizontalOptions="Center" 
+                       VerticalOptions="Center"/>
+                </Border>
             </VerticalStackLayout>
-        </ScrollView>
+        </Border>
     </Grid>
 </ContentPage>

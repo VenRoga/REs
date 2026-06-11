@@ -10,34 +10,33 @@ namespace REs.Resources.ViewModels
     {
         private readonly APIServices _apiServices;
 
+        #region поля
         [ObservableProperty]
-        private string taskName;
-
+        private int _id;
         [ObservableProperty]
-        private bool isBusy;
-
+        private string _taskName;
         [ObservableProperty]
-        private string errorMessage;
-
-       
+        private DateTime _endTime = DateTime.Now.AddDays(1);
+        [ObservableProperty]
+        private bool _isBusy;
+        [ObservableProperty]
+        private string _errorMessage;
+        #endregion
         public NewTaskVM(APIServices apiServices)
         {
             _apiServices = apiServices;
         }
-
-        partial void OnTaskNameChanged(string value)
-        {
-            if (!string.IsNullOrWhiteSpace(ErrorMessage))
-                ErrorMessage = string.Empty;
-        }
-
+        #region команды
         [RelayCommand]
         private async Task CreateTask()
         {
             if (string.IsNullOrWhiteSpace(TaskName))
             {
-                ErrorMessage = "Please enter task name";
-                return;
+                ErrorMessage = "Please enter task name"; return;
+            }
+            if (EndTime < DateTime.Now)
+            {
+                ErrorMessage = "End time cannot be in the past"; return;
             }
 
             IsBusy = true;
@@ -49,15 +48,18 @@ namespace REs.Resources.ViewModels
                 {
                     Name = TaskName,
                     Ready = false,
-                    Created = DateTime.Now
+                    Created = DateTime.Now,
+                    Ended = EndTime
                 };
 
-                var success = await _apiServices.CreateTaskAsync(newTask);
+                var createdTask = await _apiServices.CreateTaskAsync(newTask);
 
-                if (success)
+                if (createdTask != null && createdTask.Id > 0)
                 {
+                    Id = createdTask.Id;
                     await Shell.Current.DisplayAlert("Success", "Task created successfully!", "OK");
                     TaskName = string.Empty;
+                    EndTime = DateTime.Now.AddDays(1);
                     await GoToInProccess();
                 }
                 else
@@ -76,11 +78,10 @@ namespace REs.Resources.ViewModels
         }
 
         [RelayCommand]
-        private async Task GoToInProccess() =>
+        private async Task GoToInProccess()
+        {
             await Shell.Current.GoToAsync(nameof(InProccessPage));
-
-        [RelayCommand]
-        private async Task GoToCompleted() =>
-            await Shell.Current.GoToAsync(nameof(CompletedPage));
+        }
+        #endregion
     }
 }
