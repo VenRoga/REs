@@ -16,10 +16,11 @@ namespace REs.Services
         {
             return await _httpClient.GetFromJsonAsync<List<TaskModel>>("api/tasks") ?? new List<TaskModel>();
         }
-        public async Task<bool> CreateTaskAsync(TaskModel task)
+        public async Task<TaskModel> CreateTaskAsync(TaskModel task)
         {
             var response = await _httpClient.PostAsJsonAsync("api/tasks", task);
-            return response.IsSuccessStatusCode;
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync<TaskModel>();
         }
         public async Task<bool> UpdateTaskAsync(TaskModel task)
         {
