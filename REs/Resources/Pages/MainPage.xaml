@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="REs.Resources.Pages.MainPage"
+             xmlns:l="clr-namespace:REs.Resources.ViewModels"           
+             xmlns:s="clr-namespace:REs.Resources.Styles">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <s:StylesForApp/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <Grid>
+        <Image Source="background_for_main_page.png" Aspect="AspectFill" />
+
+        <Grid 
+            HorizontalOptions="Center" 
+              VerticalOptions="Center"
+              ColumnDefinitions="Auto, Auto">
+
+            <Border 
+                Grid.Column="0"
+                BackgroundColor="#E608111A" 
+                StrokeShape="RoundRectangle 24" 
+                Padding="15" 
+                WidthRequest="220"
+                VerticalOptions="Center">
+
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="HI merr" TextColor="{StaticResource MutedText}" FontSize="12" FontAttributes="Bold" Margin="4,8,0,12"/>
+
+                    <Border Style="{StaticResource MenuButtonStyle}">
+                        <Border.Behaviors>
+                            <toolkit:TouchBehavior 
+                                HoveredBackgroundColor="#30FFFFFF" />
+                        </Border.Behaviors>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding GoToInProccessCommand}" />
+                        </Border.GestureRecognizers>
+                        <Label Style="{StaticResource MenuLabelStyle}"
+                            Text="In Process Tasks">
+                        </Label>
+                    </Border>
+
+                    <Border Style="{StaticResource MenuButtonStyle}">
+                        <Border.Behaviors>
+                            <toolkit:TouchBehavior 
+                                HoveredBackgroundColor="#30FFFFFF" />
+                        </Border.Behaviors>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding GoToCompletedCommand}" />
+                        </Border.GestureRecognizers>
+                        <Label Style="{StaticResource MenuLabelStyle}"
+                            Text="Completed Tasks">
+                        </Label>
+                    </Border>
+
+                    <Border Style="{StaticResource MenuButtonStyle}">
+                        <Border.Behaviors>
+                            <toolkit:TouchBehavior 
+                                HoveredBackgroundColor="#30FFFFFF" />
+                        </Border.Behaviors>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding GoToNewTaskCommand}" />
+                        </Border.GestureRecognizers>
+                        <Label Style="{StaticResource MenuLabelStyle}"
+                            Text="New Tasks">
+                        </Label>
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+    </Grid>
+</ContentPage>
