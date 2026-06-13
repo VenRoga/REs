@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using ModelsLib;
 using REs.Resources.Pages;
 using REs.Services;
+using System.Globalization;
 
 namespace REs.Resources.ViewModels
 {
@@ -16,11 +17,13 @@ namespace REs.Resources.ViewModels
         [ObservableProperty]
         private string _taskName;
         [ObservableProperty]
-        private DateTime _endTime = DateTime.Now.AddDays(1);
+        private DateTime _endTime;
         [ObservableProperty]
         private bool _isBusy;
         [ObservableProperty]
         private string _errorMessage;
+        [ObservableProperty]
+        private string _endTmeString = DateTime.Today.AddDays(1).ToString("dd.MM.yyyy");
         #endregion
         public NewTaskVM(APIServices apiServices)
         {
@@ -32,16 +35,22 @@ namespace REs.Resources.ViewModels
         {
             if (string.IsNullOrWhiteSpace(TaskName))
             {
-                ErrorMessage = "Please enter task name"; return;
+                ErrorMessage = "Please enter task name";
+                return;
             }
-            if (EndTime < DateTime.Now)
+            if (!DateTime.TryParseExact(EndTmeString, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedEndTime))
             {
-                ErrorMessage = "End time cannot be in the past"; return;
+                ErrorMessage = "Please enter a valid date format (dd.mm.yyyy)";
+                return;
+            }
+            if (parsedEndTime.Date < DateTime.Today)
+            {
+                ErrorMessage = "End time cannot be in the past";
+                return;
             }
 
             IsBusy = true;
             ErrorMessage = string.Empty;
-
             try
             {
                 var newTask = new TaskModel
@@ -49,38 +58,33 @@ namespace REs.Resources.ViewModels
                     Name = TaskName,
                     Ready = false,
                     Created = DateTime.Now,
-                    Ended = EndTime
+                    Ended = parsedEndTime
                 };
 
                 var createdTask = await _apiServices.CreateTaskAsync(newTask);
-
                 if (createdTask != null && createdTask.Id > 0)
                 {
                     Id = createdTask.Id;
                     await Shell.Current.DisplayAlert("Success", "Task created successfully!", "OK");
                     TaskName = string.Empty;
-                    EndTime = DateTime.Now.AddDays(1);
-                    await GoToInProccess();
+                    EndTmeString = DateTime.Today.AddDays(1).ToString("dd.MM.yyyy"); 
+                    await GoToInProccessPage();
                 }
-                else
-                {
-                    ErrorMessage = "Failed to create task on server.";
-                }
+                else ErrorMessage = "Failed to create task on server.";
             }
-            catch (Exception ex)
-            {
-                ErrorMessage = $"Network error: {ex.Message}";
-            }
-            finally
-            {
-                IsBusy = false;
-            }
+            catch (Exception ex) { ErrorMessage = $"Network error: {ex.Message}"; }
+            finally { IsBusy = false; }
         }
 
         [RelayCommand]
-        private async Task GoToInProccess()
+        private async Task GoToInProccessPage()
         {
             await Shell.Current.GoToAsync(nameof(InProccessPage));
+        }
+        [RelayCommand]
+        static private async Task GoToMainPage()
+        {
+            await Shell.Current.GoToAsync("..");
         }
         #endregion
     }

@@ -19,100 +19,87 @@
     <Grid>
         <Image Source="background_for_main_page.png" Aspect="AspectFill" />
 
-        <Border HorizontalOptions="Center" 
+        <Border 
+            HorizontalOptions="Center" 
             VerticalOptions="Center"
             BackgroundColor="#E608111A" 
             StrokeShape="RoundRectangle 24" 
-            Padding="30,25"
-            WidthRequest="400">
+            Padding="30,25">
 
-            <VerticalStackLayout Spacing="20" HorizontalOptions="Fill">
+            <VerticalStackLayout 
+                HorizontalOptions="Fill"
+                VerticalOptions="Center"
+                Spacing="15">
 
-                <Label Text="Create New Task" 
-                   FontSize="28" 
-                   TextColor="{StaticResource MutedText}"
-                   FontAttributes="Bold" 
-                   HorizontalOptions="Center"
-                   Margin="0,0,0,10"/>
+                <Label 
+                    Text="Create New Task" 
+                    FontSize="28" 
+                    TextColor="{StaticResource White}"
+                    FontAttributes="Bold" 
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"/>
 
-                <Grid ColumnDefinitions="*,*" 
-      RowDefinitions="Auto"
-      ColumnSpacing="12"
-      Margin="0">
-
-                    <!-- Первый элемент (Entry) -->
-                    <Border Grid.Column="0"
-            StrokeShape="RoundRectangle 16"
-            StrokeThickness="1"
-            Stroke="{StaticResource CardOutline}"
-            BackgroundColor="#0DFFFFFF"
-            Padding="16,12"
-            HeightRequest="52">
-                        <Entry Text="{Binding TaskName, Mode=TwoWay}"
-               Placeholder="Task Name"
-               PlaceholderColor="#5A6E75"
-               TextColor="#FFFFFF"
-               FontSize="16"
-               VerticalOptions="Center"
-               IsEnabled="{Binding IsBusy, Converter={toolkit:InvertedBoolConverter}}"/>
-                    </Border>
-
-                    <!-- Второй элемент (DatePicker) -->
-                    <Border Grid.Column="1"
-            StrokeShape="RoundRectangle 16"
-            StrokeThickness="1"
-            Stroke="{StaticResource CardOutline}"
-            BackgroundColor="#0DFFFFFF"
-            Padding="16,12"
-            HeightRequest="52">
-                        <DatePicker Date="{Binding EndTime, Mode=TwoWay}"
-                    Format="dd.MM.yyyy"
-                    TextColor="#FFFFFF"
+                <Entry 
+                    Text="{Binding TaskName, Mode=TwoWay}"
+                    PlaceholderColor="{StaticResource MutedText}"
+                    Placeholder="Task Name"
+                    TextColor="LightSkyBlue"
                     FontSize="16"
-                    BackgroundColor="Transparent"
                     VerticalOptions="Center"
-                    IsEnabled="{Binding IsBusy, Converter={toolkit:InvertedBoolConverter}}"/>
-                    </Border>
+                    HorizontalOptions="Fill"
+                    BackgroundColor="Transparent"/>
 
-                </Grid>
-
-                <Label Text="{Binding ErrorMessage}"
-                   TextColor="#FF4B4B"
-                   FontSize="12"
-                   HorizontalOptions="Center"
-                   IsVisible="{Binding ErrorMessage, Converter={toolkit:IsStringNotNullOrWhiteSpaceConverter}}"/>
-
-                <ActivityIndicator IsRunning="{Binding IsBusy}"
-                               IsVisible="{Binding IsBusy}"
-                               Color="#38BDF8"
-                               HeightRequest="30"
-                               HorizontalOptions="Center"/>
-
-                <Border Style="{StaticResource MenuButtonStyle}"
-                    Opacity="{Binding IsBusy, Converter={toolkit:InvertedBoolConverter}, ConverterParameter=0.5}">
+                <Entry 
+                    Text="{Binding EndTmeString, Mode=TwoWay}"
+                    PlaceholderColor="{StaticResource MutedText}"
+                    Placeholder="dd.mm.yyyy"
+                    TextColor="LightSkyBlue"
+                    FontSize="16"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Fill"
+                    BackgroundColor="Transparent"
+                    Keyboard="Numeric" 
+                    IsEnabled="{Binding IsBusy, Converter={toolkit:InvertedBoolConverter}}">
+                </Entry>
+                
+                <Label 
+                    Text="{Binding ErrorMessage}"
+                    TextColor="Red"
+                    FontSize="12"
+                    HorizontalOptions="Center"
+                    WidthRequest="150"
+                    HeightRequest="50"
+                    IsVisible="{Binding ErrorMessage, Converter={toolkit:IsStringNotNullOrWhiteSpaceConverter}}"/>
+ 
+                <Border Style="{StaticResource MenuButtonStyle}">
                     <Border.Behaviors>
-                        <toolkit:TouchBehavior HoveredBackgroundColor="#30FFFFFF" />
+                        <toolkit:TouchBehavior 
+                            HoveredBackgroundColor="#30FFFFFF" />
                     </Border.Behaviors>
                     <Border.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding CreateTaskCommand}"/>
+                        <TapGestureRecognizer Command="{Binding CreateTaskCommand}" />
                     </Border.GestureRecognizers>
-                    <Label Style="{StaticResource MenuLabelStyle}" 
-                       Text="Create" 
-                       HorizontalOptions="Center" 
-                       VerticalOptions="Center"/>
+                    <Label 
+                        Style="{StaticResource MenuLabelStyle}"
+                        Text="Create new task"
+                        HorizontalOptions="Center">
+                    </Label>
                 </Border>
 
                 <Border Style="{StaticResource MenuButtonStyle}">
                     <Border.Behaviors>
-                        <toolkit:TouchBehavior HoveredBackgroundColor="#30FFFFFF" />
+                        <toolkit:TouchBehavior 
+                            HoveredBackgroundColor="#30FFFFFF" />
                     </Border.Behaviors>
                     <Border.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding GoToInProccessCommand}"/>
+                        <TapGestureRecognizer Command="{Binding GoToMainPageCommand}" />
                     </Border.GestureRecognizers>
-                    <Label Style="{StaticResource MenuLabelStyle}" 
-                       Text="Cancel" 
-                       HorizontalOptions="Center" 
-                       VerticalOptions="Center"/>
+                    <Label 
+                        Style="{StaticResource MenuLabelStyle}"
+                        Text="Canel"
+                        HorizontalOptions="Center">
+
+                    </Label>
                 </Border>
             </VerticalStackLayout>
         </Border>
