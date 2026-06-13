@@ -70,8 +70,9 @@
                     WidthRequest="150"
                     HeightRequest="50"
                     IsVisible="{Binding ErrorMessage, Converter={toolkit:IsStringNotNullOrWhiteSpaceConverter}}"/>
- 
-                <Border Style="{StaticResource MenuButtonStyle}">
+
+                <Border Style="{StaticResource MenuButtonStyle}"
+                        IsEnabled="{Binding IsFormValid}">
                     <Border.Behaviors>
                         <toolkit:TouchBehavior 
                             HoveredBackgroundColor="#30FFFFFF" />

@@ -12,25 +12,33 @@ namespace REs.Resources.ViewModels
         private readonly APIServices _apiServices;
 
         #region поля
+        public bool IsFormValid => !string.IsNullOrWhiteSpace(TaskName) && !string.IsNullOrWhiteSpace(EndTmeString) && !IsBusy;
         [ObservableProperty]
         private int _id;
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(CreateTaskCommand))]
+        [NotifyPropertyChangedFor(nameof(IsFormValid))] 
         private string _taskName;
         [ObservableProperty]
         private DateTime _endTime;
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(CreateTaskCommand))]
+        [NotifyPropertyChangedFor(nameof(IsFormValid))] 
         private bool _isBusy;
         [ObservableProperty]
         private string _errorMessage;
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(CreateTaskCommand))]
+        [NotifyPropertyChangedFor(nameof(IsFormValid))]
         private string _endTmeString = DateTime.Today.AddDays(1).ToString("dd.MM.yyyy");
+
         #endregion
         public NewTaskVM(APIServices apiServices)
         {
             _apiServices = apiServices;
         }
         #region команды
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(IsFormValid))]
         private async Task CreateTask()
         {
             if (string.IsNullOrWhiteSpace(TaskName))
@@ -85,7 +93,7 @@ namespace REs.Resources.ViewModels
         static private async Task GoToMainPage()
         {
             await Shell.Current.GoToAsync("..");
-        }
+        }       
         #endregion
     }
 }
