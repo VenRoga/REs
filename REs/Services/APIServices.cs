@@ -13,10 +13,12 @@ namespace REs.Services
             _httpClient = httpClient;
         }
         #region методы
+        //получить задачу
         public async Task<List<TaskModel>> GetTasksAsync()
         {
             return await _httpClient.GetFromJsonAsync<List<TaskModel>>("api/tasks") ?? new List<TaskModel>();
         }
+        //создать задачу
         public async Task<TaskModel> CreateTaskAsync(TaskModel task)
         {
             try
@@ -39,11 +41,13 @@ namespace REs.Services
                 throw new Exception($"Network error: {ex.Message}", ex);
             }
         }
+        //обновить
         public async Task<bool> UpdateTaskAsync(TaskModel task)
         {
             var response = await _httpClient.PutAsJsonAsync($"api/tasks/{task.Id}", task);
             return response.IsSuccessStatusCode;
         }
+        //удалить
         public async Task<bool> DeleteTaskAsync(int id)
         {
             var response = await _httpClient.DeleteAsync($"api/tasks/{id}");

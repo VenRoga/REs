@@ -11,14 +11,7 @@ namespace REsAPI.Services
         {
             _context = context;
         }
-        public async Task<List<TaskModel>> GetTasksAsync()
-        {
-            return await _context.Tasks.OrderByDescending(t => t.Created).ToListAsync();
-        }
-        public async Task<TaskModel?> GetTaskByIdAsync(int id)
-        {
-            return await _context.Tasks.FindAsync(id);
-        }
+        //создание
         public async Task<TaskModel> CreateTaskAsync(TaskModel task)
         {
             task.Created = DateTime.Now;
@@ -47,7 +40,7 @@ namespace REsAPI.Services
             await _context.SaveChangesAsync();
             return existing;
         }
-
+        //удаление
         public async Task<bool> DeleteTaskAsync(int id)
         {
             var task = await _context.Tasks.FindAsync(id);
@@ -57,6 +50,16 @@ namespace REsAPI.Services
             _context.Tasks.Remove(task);
             await _context.SaveChangesAsync();
             return true;
+        }
+        //получить задачу
+        public async Task<List<TaskModel>> GetTasksAsync()
+        {
+            return await _context.Tasks.OrderByDescending(t => t.Created).ToListAsync();
+        }
+        //получить по id
+        public async Task<TaskModel?> GetTaskByIdAsync(int id)
+        {
+            return await _context.Tasks.FindAsync(id);
         }
     }
 }

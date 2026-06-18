@@ -35,6 +35,7 @@ namespace REs.Resources.ViewModels
         }
         #region команды
         [RelayCommand(CanExecute = nameof(IsFormValid))]
+        //создание задачи
         private async Task CreateTask()
         {
             if (string.IsNullOrWhiteSpace(TaskName))
@@ -96,6 +97,7 @@ namespace REs.Resources.ViewModels
                 IsBusy = false;
             }
         }
+        //переход между страницами
         [RelayCommand]
         private async Task GoToInProccessPage()
         {
