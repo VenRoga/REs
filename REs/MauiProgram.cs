@@ -41,7 +41,13 @@ namespace REs
             // Регистрация сервиса API
             builder.Services.AddHttpClient<APIServices>(client =>
             {
-                client.BaseAddress = new Uri("http://localhost:5000/"); //поменять на ссылку нужную, заглушка пока что.
+#if ANDROID
+                client.BaseAddress = new Uri("http://10.0.2.2:5000/");
+#elif WINDOWS
+                client.BaseAddress = new Uri("http://localhost:5000/");
+#else
+                client.BaseAddress = new Uri("http://localhost:5000/"); 
+#endif
             });
             #endregion
 #if DEBUG

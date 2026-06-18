@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using System.Diagnostics;
+using System.Net.Http.Json;
 using ModelsLib;
 
 namespace REs.Services
@@ -18,9 +19,25 @@ namespace REs.Services
         }
         public async Task<TaskModel> CreateTaskAsync(TaskModel task)
         {
-            var response = await _httpClient.PostAsJsonAsync("api/tasks", task);
-            response.EnsureSuccessStatusCode();
-            return await response.Content.ReadFromJsonAsync<TaskModel>();
+            try
+            {
+                var fullUrl = _httpClient.BaseAddress + "api/tasks";
+                Debug.WriteLine($"Запрос к: {fullUrl}");
+                var response = await _httpClient.PostAsJsonAsync("api/tasks", task);
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<TaskModel>();
+                }
+                else
+                {
+                    var error = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"Server returned {response.StatusCode}: {error}");
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new Exception($"Network error: {ex.Message}", ex);
+            }
         }
         public async Task<bool> UpdateTaskAsync(TaskModel task)
         {

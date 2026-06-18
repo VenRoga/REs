@@ -50,22 +50,21 @@
                     BackgroundColor="Transparent"/>
 
                 <Entry 
-                    Text="{Binding EndTmeString, Mode=TwoWay}"
-                    PlaceholderColor="{StaticResource MutedText}"
+                    Text="{Binding EndTimeString, Mode=TwoWay}"
                     Placeholder="dd.mm.yyyy"
                     TextColor="LightSkyBlue"
                     FontSize="16"
                     VerticalOptions="Center"
                     HorizontalOptions="Fill"
                     BackgroundColor="Transparent"
-                    Keyboard="Numeric" 
+                    Keyboard="Numeric"
                     IsEnabled="{Binding IsBusy, Converter={toolkit:InvertedBoolConverter}}">
                 </Entry>
-                
+
                 <Label 
                     Text="{Binding ErrorMessage}"
                     TextColor="Red"
-                    FontSize="12"
+                    FontSize="9"
                     HorizontalOptions="Center"
                     WidthRequest="150"
                     HeightRequest="50"

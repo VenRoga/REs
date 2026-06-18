@@ -11,9 +11,12 @@ namespace ModelsLib
     {
         [Key]
         public int Id { get; set; }
+
+        [Required]
         public string Name { get; set; }
         public bool Ready { get; set; }
         public DateTime Created { get; set; } = DateTime.Now;
-        public DateTime Ended { get; set; }
+        public DateTime? Ended { get; set; }
+        public DateTime? Deadline { get; set; }
     }
 }
