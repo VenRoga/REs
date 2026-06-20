@@ -53,6 +53,16 @@ namespace REs.Services
             var response = await _httpClient.DeleteAsync($"api/tasks/{id}");
             return response.IsSuccessStatusCode;
         }
+        //получить задачи в процессе
+        public async Task<List<TaskModel>> GetPendingTasksAsync()
+        {
+            return await _httpClient.GetFromJsonAsync<List<TaskModel>>("api/tasks/pending") ?? new List<TaskModel>();
+        }
+        //получить завершённые задачи
+        public async Task<List<TaskModel>> GetReadyTasksAsync()
+        {
+            return await _httpClient.GetFromJsonAsync<List<TaskModel>>("api/tasks/ready") ?? new List<TaskModel>();
+        }
         #endregion
     }
 }

@@ -40,21 +40,20 @@ public class TasksController : ControllerBase
         return CreatedAtAction(nameof(GetTask), new { id = created.Id }, created);
     }
 
-    // PUT – обновляем только Name и Ready
+    // PUT – обновляем задачу
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateTask(int id, [FromBody] TaskModel incoming)
     {
         if (id != incoming.Id)
             return BadRequest("ID mismatch");
-
         var task = new TaskModel
         {
+            Id = id,                     
             Name = incoming.Name,
-            Ready = false,
-            Created = DateTime.UtcNow,
-            Ended = null,
-            Deadline = incoming.Deadline 
+            Ready = incoming.Ready,      
+            Deadline = incoming.Deadline
         };
+
         try
         {
             var updated = await _taskService.UpdateTaskAsync(task);
@@ -85,5 +84,28 @@ public class TasksController : ControllerBase
     {
         var deleted = await _taskService.DeleteTaskAsync(id);
         return deleted ? NoContent() : NotFound();
+    }
+
+    // PENDING
+    [HttpGet("pending")]
+    public async Task<IActionResult> GetPendingTasks()
+    {
+        var tasks = await _taskService.GetPendingTasksAsync();
+        return Ok(tasks);
+    }
+
+    //READY
+    [HttpGet("ready")]
+    public async Task<IActionResult> GetReadyTasks()
+    {
+        var tasks = await _taskService.GetReadyTasksAsync();
+        return Ok(tasks);
+    }
+    //AUTO-COMPLETE
+    [HttpPost("auto-complete")]
+    public async Task<IActionResult> AutoCompleteExpiredTasks()
+    {
+        var count = await _taskService.AutoCompleteExpiredTasksAsync();
+        return Ok(new { completed = count, message = $"{count} tasks auto-completed" });
     }
 }

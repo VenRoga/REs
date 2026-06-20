@@ -61,5 +61,34 @@ namespace REsAPI.Services
         {
             return await _context.Tasks.FindAsync(id);
         }
+        public async Task<List<TaskModel>> GetPendingTasksAsync()
+        {
+            return await _context.Tasks.Where(t => !t.Ready).OrderByDescending(t => t.Created).ToListAsync();
+        }
+        public async Task<List<TaskModel>> GetReadyTasksAsync()
+        {
+            return await _context.Tasks.Where(t => t.Ready).OrderByDescending(t => t.Ended).ToListAsync();
+        }
+        //завершение задач автоматически
+
+        public async Task<int> AutoCompleteExpiredTasksAsync()
+        {
+
+            var expiredTasks = await _context.Tasks
+                .Where(t => !t.Ready && t.Deadline.HasValue && t.Deadline.Value < DateTime.UtcNow)
+                .ToListAsync();
+
+            if (!expiredTasks.Any())
+                return 0;
+
+            foreach (var task in expiredTasks)
+            {
+                task.Ready = true;
+                task.Ended = DateTime.UtcNow;
+            }
+
+            await _context.SaveChangesAsync();
+            return expiredTasks.Count;
+        }
     }
 }

@@ -10,6 +10,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<ITaskModelServicesInterface, TaskService>();
+builder.Services.AddHostedService<AutoCompleteService>();
 
 builder.Services.AddCors(options =>
 {
@@ -34,5 +35,5 @@ app.UseHttpsRedirection();
 app.UseCors("AllowAll");
 app.UseAuthorization();
 app.MapControllers();
-app.Urls.Add("http://0.0.0.0:5000");
+app.Urls.Add("http://0.0.0.0:5001");
 app.Run();
