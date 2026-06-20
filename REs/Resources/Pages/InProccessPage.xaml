@@ -10,80 +10,91 @@
     <Grid>
         <Image Source="background_for_main_page.png" Aspect="AspectFill" />
         <Border Grid.Column="0"
-        BackgroundColor="#E608111A" 
-        StrokeShape="RoundRectangle 24" 
-        Padding="15" 
-        WidthRequest="450"
-        VerticalOptions="Center">
+                BackgroundColor="#E608111A" 
+                StrokeShape="RoundRectangle 24" 
+                Padding="15" 
+                WidthRequest="450"
+                VerticalOptions="Center">
+
             <Grid RowDefinitions="Auto, Auto, *"
-          Padding="20"
-          RowSpacing="15">
+                  Padding="20"
+                  RowSpacing="10">
 
                 <Label Grid.Row="0"
-               Text="In Process Tasks"
-               FontSize="28"
-               FontAttributes="Bold"
-               HorizontalOptions="Center"
+                       Text="In Process Tasks"
+                       FontSize="28"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
                        TextColor="White"/>
 
                 <Label Grid.Row="1"
-               Text="{Binding ErrorMessage}"
-               TextColor="#800000"
-               FontSize="13"
-               HorizontalOptions="Center"
-               IsVisible="{Binding ErrorMessage, Converter={toolkit:IsStringNotNullOrWhiteSpaceConverter}}" />
+                       Text="{Binding ErrorMessage}"
+                       TextColor="#800000"
+                       FontSize="13"
+                       HorizontalOptions="Center"
+                       IsVisible="{Binding ErrorMessage, Converter={toolkit:IsStringNotNullOrWhiteSpaceConverter}}" />
+                <StackLayout Grid.Row="2" Spacing="10">
+                    <RefreshView IsRefreshing="{Binding IsBusy}"
+                                 Command="{Binding LoadTasksCommand}"
+                                 VerticalOptions="FillAndExpand">
 
-                <RefreshView Grid.Row="2"
-                     IsRefreshing="{Binding IsBusy}"
-                     Command="{Binding LoadTasksCommand}">
+                        <CollectionView ItemsSource="{Binding Tasks}"
+                                        EmptyView="No tasks in process"
+                                        ItemsLayout="VerticalList">
 
-                    <CollectionView ItemsSource="{Binding Tasks}"
-                EmptyView="No tasks in process"
-                ItemsLayout="VerticalList">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="l:TaskListItemVM">
+                                    <Grid Margin="0,8" HorizontalOptions="Center">
+                                        <Border 
+                                            WidthRequest="360"          
+                                            HorizontalOptions="Center"
+                                            Padding="14"
+                                            StrokeThickness="2"
+                                            Stroke="#000000"
+                                            BackgroundColor="{Binding DeadlineColor}"
+                                            StrokeShape="RoundRectangle 14">
 
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="l:TaskListItemVM">
-                                <Grid Margin="0,8" HorizontalOptions="Center">
-                                    <Border WidthRequest="360"          
-                                HorizontalOptions="Center"
-                        Padding="14"
-                        StrokeThickness="2"
-                        Stroke="#000000"
-                        BackgroundColor="{Binding DeadlineColor}"
-                        StrokeShape="RoundRectangle 14">
+                                            <Grid RowDefinitions="Auto, Auto"
+                                                  ColumnDefinitions="*, Auto"
+                                                  ColumnSpacing="10"
+                                                  RowSpacing="6">
 
-                                        <Grid RowDefinitions="Auto, Auto"
-                          ColumnDefinitions="*, Auto"
-                          ColumnSpacing="10"
-                          RowSpacing="6">
+                                                <Label Grid.Row="0"
+                                                       Grid.Column="0"
+                                                       Text="{Binding Name}"
+                                                       FontSize="18"
+                                                       FontAttributes="Bold"
+                                                       TextColor="White" />
 
-                                            <Label Grid.Row="0"
-                               Grid.Column="0"
-                               Text="{Binding Name}"
-                               FontSize="18"
-                               FontAttributes="Bold"
-                               TextColor="White" />
+                                                <Label Grid.Row="0"
+                                                       Grid.Column="1"
+                                                       Text="{Binding DeadlineText}"
+                                                       FontSize="14"
+                                                       TextColor="White"
+                                                       VerticalOptions="Center" />
 
-                                            <Label Grid.Row="0"
-                               Grid.Column="1"
-                               Text="{Binding DeadlineText}"
-                               FontSize="14"
-                               TextColor="White"
-                               VerticalOptions="Center" />
-
-                                            <Label Grid.Row="1"
-                               Grid.ColumnSpan="2"
-                               Text="{Binding Id, StringFormat='Task #{0}'}"
-                               FontSize="12"
-                               TextColor="#EFFFFFFF" />
-                                        </Grid>
-                                    </Border>
-                                </Grid>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                </RefreshView>
+                                                <Label Grid.Row="1"
+                                                       Grid.ColumnSpan="2"
+                                                       Text="{Binding Id, StringFormat='Task #{0}'}"
+                                                       FontSize="12"
+                                                       TextColor="#EFFFFFFF" />
+                                            </Grid>
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </RefreshView>
+                    <Button Text="Сортировать по дате завершения"
+                            Command="{Binding SortByDeadlineCommand}"
+                            BackgroundColor="#26384D"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            CornerRadius="14"
+                            HeightRequest="44" 
+                            HorizontalOptions="Center"/>
+                </StackLayout>
             </Grid>
         </Border>
-    </Grid> 
+    </Grid>
 </ContentPage>
