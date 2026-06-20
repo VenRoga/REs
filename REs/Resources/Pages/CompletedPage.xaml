@@ -1,14 +1,137 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="REs.Resources.Pages.CompletedPage"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:l="clr-namespace:REs.Resources.ViewModels"
-             Title="CompletedPage">
+             xmlns:s="clr-namespace:REs.Resources.Styles"
+             x:Class="REs.Resources.Pages.CompletedPage"
+             x:DataType="l:CompletedVM"
+             Title="Completed Tasks">
 
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <s:StylesForApp/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid>
+        <Image Source="background_for_main_page.png" Aspect="AspectFill" />
+
+        <Border Grid.Column="0"
+                BackgroundColor="#E608111A" 
+                StrokeShape="RoundRectangle 24" 
+                Padding="15" 
+                WidthRequest="450"
+                VerticalOptions="Center">
+
+            <Grid RowDefinitions="Auto, Auto, *"
+                  Padding="20"
+                  RowSpacing="15">
+
+                <Label Grid.Row="0"
+                       Text="Completed Tasks"
+                       FontSize="28"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center" 
+                       TextColor="White" />
+
+                <Label Grid.Row="1"
+                       Text="{Binding ErrorMessage}"
+                       TextColor="#800000"
+                       FontSize="13"
+                       HorizontalOptions="Center"
+                       IsVisible="{Binding ErrorMessage, Converter={toolkit:IsStringNotNullOrWhiteSpaceConverter}}" />
+
+                <RefreshView Grid.Row="2"
+                             IsRefreshing="{Binding IsBusy}"
+                             Command="{Binding LoadTasksCommand}">
+
+                    <CollectionView ItemsSource="{Binding Tasks}"
+                                    EmptyView="No completed tasks yet"
+                                    ItemsLayout="VerticalList">
+
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="l:TaskListItemVM">
+                                <Grid Margin="0,8">
+                                    <Border Margin="0,0"
+                                            WidthRequest="360"
+                                            Padding="14"
+                                            StrokeThickness="2"     
+                                            Stroke="#000000"
+                                            BackgroundColor="{Binding DeadlineColor}"
+                                            StrokeShape="RoundRectangle 14">
+
+                                        <Grid RowDefinitions="Auto, Auto, Auto"
+                                              ColumnDefinitions="*, Auto"
+                                              ColumnSpacing="10"
+                                              RowSpacing="4">
+
+                                            <Label Grid.Row="0"
+                                                   Grid.Column="0"
+                                                   Text="{Binding Name}"
+                                                   FontSize="18"
+                                                   FontAttributes="Bold"
+                                                   TextColor="White" />
+
+                                            <Label Grid.Row="0"
+                                                   Grid.Column="1"
+                                                   Text="{Binding DeadlineText}"
+                                                   FontSize="14"
+                                                   TextColor="White"
+                                                   VerticalOptions="Center" />
+
+                                            <Label Grid.Row="1"
+                                                   Grid.ColumnSpan="2"
+                                                   Text="{Binding Id, StringFormat='Task #{0} • Completed'}"
+                                                   FontSize="12"
+                                                   TextColor="#EFFFFFFF" />
+
+                                            <HorizontalStackLayout Grid.Row="2"
+                                                                    Grid.ColumnSpan="2"
+                                                                    Spacing="8"
+                                                                    Margin="0,4,0,0">
+                                                <Border StrokeThickness="1"
+                                                        Stroke="Black"                                                        
+                                                        StrokeShape="RoundRectangle 8"
+                                                        Padding="12,4"
+                                                        HorizontalOptions="FillAndExpand"
+                                                        BackgroundColor="Green">
+                                                    <Border.GestureRecognizers>
+                                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type l:CompletedVM}}, Path=ReopenTaskCommand}"
+                                                            CommandParameter="{Binding .}" />
+                                                    </Border.GestureRecognizers>
+                                                    <Label Text="Reopen"
+                                                           TextColor="Black"
+                                                           
+                                                           FontSize="12"
+                                                           HorizontalOptions="Center" />
+                                                </Border>
+                                                <Border StrokeThickness="1"
+                                                        Stroke="Black"
+                                                        BackgroundColor="#800000"
+                                                        StrokeShape="RoundRectangle 8"
+                                                        Padding="12,4"
+                                                        HorizontalOptions="FillAndExpand">
+                                                    <Border.GestureRecognizers>
+                                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type l:CompletedVM}}, Path=DeleteTaskCommand}"
+                                                            CommandParameter="{Binding .}" />
+                                                    </Border.GestureRecognizers>
+                                                    <Label Text="Delete"
+                                                           TextColor="Black"
+                                                           FontSize="12"
+                                                           HorizontalOptions="Center" />
+                                                </Border>
+                                            </HorizontalStackLayout>
+                                        </Grid>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </RefreshView>
+            </Grid>
+        </Border>
+    </Grid>
 </ContentPage>

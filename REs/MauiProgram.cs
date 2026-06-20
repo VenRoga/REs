@@ -42,11 +42,11 @@ namespace REs
             builder.Services.AddHttpClient<APIServices>(client =>
             {
 #if ANDROID
-                client.BaseAddress = new Uri("http://10.0.2.2:5000/");
+                client.BaseAddress = new Uri("http://10.0.2.2:5001/");
 #elif WINDOWS
-                client.BaseAddress = new Uri("http://localhost:5000/");
+                client.BaseAddress = new Uri("http://localhost:5001/");
 #else
-                client.BaseAddress = new Uri("http://localhost:5000/"); 
+                client.BaseAddress = new Uri("http://localhost:5001/"); 
 #endif
             });
             #endregion

@@ -61,5 +61,13 @@ namespace REsAPI.Services
         {
             return await _context.Tasks.FindAsync(id);
         }
+        public async Task<List<TaskModel>> GetPendingTasksAsync()
+        {
+            return await _context.Tasks.Where(t => !t.Ready).OrderByDescending(t => t.Created).ToListAsync();
+        }
+        public async Task<List<TaskModel>> GetReadyTasksAsync()
+        {
+            return await _context.Tasks.Where(t => t.Ready).OrderByDescending(t => t.Ended).ToListAsync();
+        }
     }
 }

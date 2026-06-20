@@ -10,5 +10,14 @@ namespace REs.Resources.Pages
             InitializeComponent();
             BindingContext = vm;
         }
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+
+            if (BindingContext is CompletedVM vm)
+            {
+                await vm.LoadTasksCommand.ExecuteAsync(null);
+            }
+        }
     }
 }
