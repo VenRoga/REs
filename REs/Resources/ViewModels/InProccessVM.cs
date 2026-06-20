@@ -26,6 +26,17 @@ namespace REs.Resources.ViewModels
         }
 
         [RelayCommand]
+        public void SortByDeadline()
+        {
+            var sortedTasks = Tasks
+              .OrderBy(task => task.Deadline?.ToLocalTime().Date ?? DateTime.MaxValue)
+        .ThenBy(task => task.Name)
+        .ToList();
+
+            Tasks = new ObservableCollection<TaskListItemVM>(sortedTasks);
+        }
+
+        [RelayCommand]
         public async Task LoadTasks()
         {
             if (IsBusy)
@@ -73,7 +84,7 @@ namespace REs.Resources.ViewModels
         {
             get
             {
-                if (Task.Ready)  
+                if (Task.Ready)
                     return Color.FromArgb("#800080");
 
                 if (!Deadline.HasValue)
