@@ -10,6 +10,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<ITaskModelServicesInterface, TaskService>();
+builder.Services.AddHostedService<AutoCompleteService>();
 
 builder.Services.AddCors(options =>
 {

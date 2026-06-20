@@ -101,4 +101,11 @@ public class TasksController : ControllerBase
         var tasks = await _taskService.GetReadyTasksAsync();
         return Ok(tasks);
     }
+    //AUTO-COMPLETE
+    [HttpPost("auto-complete")]
+    public async Task<IActionResult> AutoCompleteExpiredTasks()
+    {
+        var count = await _taskService.AutoCompleteExpiredTasksAsync();
+        return Ok(new { completed = count, message = $"{count} tasks auto-completed" });
+    }
 }
